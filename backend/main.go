@@ -3,21 +3,40 @@ package main
 import (
 	"chess-engine/api"
 	"chess-engine/service"
+	"log"
+	"os"
+	"strings"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
 	r := gin.Default()
 
 	gm := service.NewGameManager()
 	h := api.NewHandler(gm)
 
-	// origins := strings.Split(os.Getenv("ALLOWED_ORIGINS"), ",")
+	// fmt.Println("ALLOWED_ORIGINS =", os.Getenv("ALLOWED_ORIGINS"))
+
+	raw := os.Getenv("ALLOWED_ORIGINS")
+	origins := []string{}
+
+	for _, o := range strings.Split(raw, ",") {
+		o = strings.TrimSpace(o)
+		if o != "" {
+			origins = append(origins, o)
+		}
+	}
 
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"*"},
+		AllowOrigins:     origins,
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		AllowCredentials: true,
