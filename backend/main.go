@@ -3,7 +3,8 @@ package main
 import (
 	"chess-engine/api"
 	"chess-engine/service"
-	"time"
+	"os"
+	"strings"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -15,12 +16,13 @@ func main() {
 	gm := service.NewGameManager()
 	h := api.NewHandler(gm)
 
+	origins := strings.Split(os.Getenv("ALLOWED_ORIGINS"), ",")
+
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:5173"},
+		AllowOrigins:     origins,
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		AllowCredentials: true,
-		MaxAge:           12 * time.Hour,
 	}))
 
 	api := r.Group("/api")
