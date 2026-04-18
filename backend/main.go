@@ -3,7 +3,7 @@ package main
 import (
 	"chess-engine/api"
 	"chess-engine/service"
-	"log"
+	"fmt"
 	"os"
 	"strings"
 
@@ -15,7 +15,7 @@ import (
 func main() {
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		fmt.Println("Error loading .env file")
 	}
 
 	r := gin.Default()
