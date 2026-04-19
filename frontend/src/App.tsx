@@ -134,7 +134,9 @@ function App() {
               Chess Game
             </h1>
           </div>
-          <p className="text-gray-500 mt-1">Play vs AI or with a friend</p>
+          <p className="text-gray-500 mt-1">
+            Play vs Computer or with a friend
+          </p>
         </div>
 
         {/* Control Panel */}
