@@ -110,6 +110,13 @@ func (h *Handler) AIMove(c *gin.Context) {
 		return
 	}
 
+	status := "ok"
+	if engine.IsCheckmate(game, game.Turn) {
+		status = "checkmate"
+	} else if engine.IsCheck(game.Board, game.Turn) {
+		status = "check"
+	}
+
 	move := engine.BestMove(game.Board, game.Turn, 3)
 	if move == nil {
 		c.JSON(400, gin.H{"error": "no moves"})
@@ -119,8 +126,9 @@ func (h *Handler) AIMove(c *gin.Context) {
 	game.Move(*move)
 
 	c.JSON(200, gin.H{
-		"move":  move,
-		"turn":  game.Turn,
-		"board": serializeBoard(game.Board),
+		"move":   move,
+		"turn":   game.Turn,
+		"board":  serializeBoard(game.Board),
+		"status": status,
 	})
 }
